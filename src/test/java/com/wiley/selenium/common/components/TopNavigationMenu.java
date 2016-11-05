@@ -56,4 +56,10 @@ public class TopNavigationMenu {
         Assert.assertTrue(help.isDisplayed());
     }
     // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="home">
+    public void clickOnHome() {
+        home.click();
+    }
+    // </editor-fold>
 }

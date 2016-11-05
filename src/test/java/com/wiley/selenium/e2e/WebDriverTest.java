@@ -27,12 +27,17 @@ public class WebDriverTest {
     private List<String> expectedTitlesOfAllTheItemsInTheResourcesForMenu= Arrays.asList("Authors",
      "Librarians", "Booksellers", "Instructors", "Students", "Government Employees", "Societies", "Corporate Partners");
 
+    private String emptyEmailAlertMessage = "Please enter email address";
+    private String invalidEmailAlertMessage = "Invalid email address.";
+    private String invalidEmail = "putinmail.ru";
+
     @BeforeMethod
     public void beforeMethod() {
         System.setProperty("webdriver.chrome.driver","chromedriver");
         driver = new ChromeDriver();
         wileyCDAPage = PageFactory.initElements(driver, WileyCDAPage.class);
         students = PageFactory.initElements(driver, Students.class);
+
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
@@ -52,6 +57,17 @@ public class WebDriverTest {
         students.resourcesForMenu.assertThatCountOfAllTheItemsEqualsToSelectedNumber(expectedCountOfAllTheItemsInTheResourcesForMenu);
         students.resourcesForMenu.assertThatTitlesOfAllTheItemsEqualToSelectedList(expectedTitlesOfAllTheItemsInTheResourcesForMenu);
         students.resourcesForMenu.assertThatStudentsItemIsSelected();
+        students.topNavigationMenu.clickOnHome();
+        wileyCDAPage.signUpToReceiveWileyUpdates.assertThatInputFieldIsDisplayed();
+        wileyCDAPage.signUpToReceiveWileyUpdates.clickOnArrowButton();
+        wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertIsDisplayed();
+        wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertHasSelectedMessage(emptyEmailAlertMessage);
+        wileyCDAPage.signUpToReceiveWileyUpdates.acceptAlert();
+        wileyCDAPage.signUpToReceiveWileyUpdates.sendTextIntoInputField(invalidEmail);
+        wileyCDAPage.signUpToReceiveWileyUpdates.clickOnArrowButton();
+        wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertIsDisplayed();
+        wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertHasSelectedMessage(invalidEmailAlertMessage);
+        wileyCDAPage.signUpToReceiveWileyUpdates.acceptAlert();
     }
 
     @AfterMethod
