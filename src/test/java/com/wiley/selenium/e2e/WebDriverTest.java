@@ -1,7 +1,7 @@
 package com.wiley.selenium.e2e;
 
-import com.wiley.selenium.common.pages.Students;
-import com.wiley.selenium.common.pages.WileyCDAPage;
+import com.wiley.selenium.common.pages.*;
+import com.wiley.selenium.common.utils.TabsOperations;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -18,6 +18,10 @@ public class WebDriverTest {
 
     WileyCDAPage wileyCDAPage;
     Students students;
+    SearchResults searchResults;
+    BookDetails bookDetails;
+    WileyedSolutions wileyedSolutions;
+    TabsOperations tabsOperations;
 
     private int expectedCountOfAllTheItemsUnderResourcesSubHeader = 9;
     private List<String> expectedTitlesOfAllTheItemsUnderResourcesSubHeader = Arrays.asList("Students",
@@ -31,13 +35,21 @@ public class WebDriverTest {
     private String invalidEmailAlertMessage = "Invalid email address.";
     private String invalidEmail = "putinmail.ru";
 
+    private String searchQuerry = "for dummies";
+
+    private Integer numberOfRandomSearchResult;
+    private String titleOfRandomSearchResult;
+
     @BeforeMethod
     public void beforeMethod() {
         System.setProperty("webdriver.chrome.driver","chromedriver");
         driver = new ChromeDriver();
         wileyCDAPage = PageFactory.initElements(driver, WileyCDAPage.class);
         students = PageFactory.initElements(driver, Students.class);
-
+        searchResults = PageFactory.initElements(driver, SearchResults.class);
+        bookDetails = PageFactory.initElements(driver, BookDetails.class);
+        wileyedSolutions = PageFactory.initElements(driver, WileyedSolutions.class);
+        tabsOperations = PageFactory.initElements(driver, TabsOperations.class);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
@@ -68,6 +80,17 @@ public class WebDriverTest {
         wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertIsDisplayed();
         wileyCDAPage.signUpToReceiveWileyUpdates.assertThatAlertHasSelectedMessage(invalidEmailAlertMessage);
         wileyCDAPage.signUpToReceiveWileyUpdates.acceptAlert();
+        wileyCDAPage.topNavigationMenu.sendTextIntoSerchInputField(searchQuerry);
+        wileyCDAPage.topNavigationMenu.clickOnSearchIcon();
+        searchResults.assertThatSearchResultsContainerIsDisplayed();
+        numberOfRandomSearchResult = searchResults.getNumberOfRandomSearchResult();
+        titleOfRandomSearchResult = searchResults.getTitleTextOfSearchResultWithSelectedNumber(numberOfRandomSearchResult);
+        searchResults.clickOnSearchResultWithSelectedNumber(numberOfRandomSearchResult);
+        bookDetails.assertThatHeaderEqualsToSelectedHeader(titleOfRandomSearchResult);
+        bookDetails.topNavigationMenu.clickOnHome();
+        wileyCDAPage.resources.clickOnInstitutionsItem();
+        tabsOperations.switchToLastTab();
+        wileyedSolutions.assertThatURLIsOpened();
     }
 
     @AfterMethod

@@ -23,6 +23,12 @@ public class TopNavigationMenu {
     @FindBy(xpath = ".//*[@id='links-site']//a[text()='Help']")
     WebElement help;
 
+    @FindBy(id = "query")
+    WebElement searchInputField;
+
+    @FindBy(className = "icon__search")
+    WebElement searchIcon;
+
     public TopNavigationMenu(WebDriver driver) {
         this.driver = driver;
     }
@@ -60,6 +66,18 @@ public class TopNavigationMenu {
     // <editor-fold defaultstate="collapsed" desc="home">
     public void clickOnHome() {
         home.click();
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="searchInputField">
+    public void sendTextIntoSerchInputField(String text) {
+        searchInputField.sendKeys(text);
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="searchIcon">
+    public void clickOnSearchIcon() {
+        searchIcon.click();
     }
     // </editor-fold>
 }

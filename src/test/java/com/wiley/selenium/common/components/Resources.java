@@ -22,6 +22,10 @@ public class Resources {
             "/following::li[@class='resource-students']")
     WebElement studentsItem;
 
+    @FindBy(xpath = ".//*[@id='homepage-resources']//h2" +
+            "/following::li[@class='resource-institutions']")
+    WebElement institutionsItem;
+
     public Resources(WebDriver driver) {
         this.driver = driver;
     }
@@ -41,6 +45,12 @@ public class Resources {
     // <editor-fold defaultstate="collapsed" desc="studentsItem">
     public void clickOnStudentsItem() {
         studentsItem.click();
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="institutionsItem">
+    public void clickOnInstitutionsItem() {
+        institutionsItem.click();
     }
     // </editor-fold>
 }
